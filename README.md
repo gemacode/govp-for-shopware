@@ -20,9 +20,9 @@ estado `shipped` o `shipped_partially`.
 - fallos conservados como `attention` y reintentables sin duplicar.
 
 La documentación oficial de Shopware identifica los plugins PHP como la vía de
-extensión con acceso al proceso y la base de datos. La versión pública observada
-durante este desarrollo es Shopware 6.7.12.2: [documentación de
-Shopware](https://developer.shopware.com/).
+extensión con acceso al proceso y la base de datos. La versión pública más
+reciente comprobada durante este desarrollo es Shopware 6.7.13.0:
+[releases oficiales](https://github.com/shopware/shopware/releases).
 
 ## Instalación candidata
 
@@ -54,7 +54,7 @@ fuera un ERP de almacén.
 
 ## Puerta nativa
 
-Consultar `NATIVE_ACCEPTANCE.md`. La instalación, actualización, desinstalación,
+Consultar `NATIVE_ACCEPTANCE.md` y `NATIVE_VALIDATION.md`. La instalación, actualización, desinstalación,
 dos canales, parcial, devolución, cola e indisponibilidad deben probarse antes
 de promover el plugin.
 
