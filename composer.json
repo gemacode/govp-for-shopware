@@ -16,5 +16,15 @@
       "de-DE": "GOVPs automatisch bei versendeten Lieferungen ausstellen.",
       "es-ES": "Emite GOVP automáticamente cuando se expiden entregas."
     }
+  },
+  "archive": {
+    "exclude": [
+      "/.github",
+      "/tests",
+      "/govp-for-shopware-*.zip",
+      "/CONTRIBUTING.md",
+      "/NATIVE_ACCEPTANCE.md",
+      "/NATIVE_VALIDATION.md"
+    ]
   }
 }

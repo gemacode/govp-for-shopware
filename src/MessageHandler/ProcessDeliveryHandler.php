@@ -4,6 +4,7 @@ namespace Gemacode\GovpForShopware\MessageHandler;
 
 use Gemacode\GovpForShopware\Message\ProcessDeliveryMessage;
 use Gemacode\GovpForShopware\Model\CanonicalEvidence;
+use Gemacode\GovpForShopware\Model\DeterministicValidity;
 use Gemacode\GovpForShopware\Model\ExchangeClient;
 use Gemacode\GovpForShopware\Model\JobRepository;
 use Gemacode\GovpForShopware\Model\TokenProvider;
@@ -45,12 +46,13 @@ final class ProcessDeliveryHandler
                 $lines[] = ['lineId' => $position->getId(), 'productNumber' => isset($payload['productNumber']) ? (string)$payload['productNumber'] : null, 'quantity' => $position->getQuantity()];
             }
             $hash = CanonicalEvidence::hash($delivery->getId(), $order->getOrderNumber(), $salesChannelId, $lines);
+            $validUntil = DeterministicValidity::fromCreatedAt($delivery->getCreatedAt(), $days);
             $result = $this->exchange->issue($baseUrl, $this->tokens->get($salesChannelId), 'shopware:channel:' . strtolower($salesChannelId) . ':delivery:' . strtolower($delivery->getId()), [
                 'issuer' => ['name' => $issuer],
                 'subject' => ['type' => 'shipment', 'id' => $delivery->getId(), 'name' => 'Shopware delivery ' . $order->getOrderNumber(), 'description' => count($lines) . ' shipped positions'],
                 'requirement' => 'Demuestra una expedición de Shopware mediante una huella de sus posiciones mínimas.',
                 'evidence' => [['label' => 'Huella canónica de la entrega Shopware', 'sha256' => $hash]],
-                'validUntil' => gmdate('c', time() + $days * 86400),
+                'validUntil' => $validUntil,
                 'source' => ['platform' => 'shopware', 'externalId' => 'delivery-' . $delivery->getId()],
             ]);
             $this->jobs->success($delivery->getId(), (string)$result['govp']['code'], (string)$result['govp']['verifyUrl']);

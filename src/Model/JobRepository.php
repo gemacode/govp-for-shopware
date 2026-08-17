@@ -8,6 +8,8 @@ use Shopware\Core\Framework\Uuid\Uuid;
 
 final class JobRepository
 {
+    private const PROCESSING_LEASE_MINUTES = 15;
+
     public function __construct(private readonly Connection $connection) {}
 
     public function queue(string $deliveryId): bool
@@ -21,9 +23,14 @@ final class JobRepository
 
     public function claim(string $deliveryId): bool
     {
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         return $this->connection->executeStatement(
-            "UPDATE gemacode_govp_delivery SET status='processing', attempts=attempts+1, last_error=NULL, updated_at=:updated WHERE delivery_id=:id AND status IN ('queued','attention')",
-            ['id' => Uuid::fromHexToBytes($deliveryId), 'updated' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT)]
+            "UPDATE gemacode_govp_delivery SET status='processing', attempts=attempts+1, last_error=NULL, updated_at=:updated WHERE delivery_id=:id AND (status IN ('queued','attention') OR (status='processing' AND updated_at < :stale))",
+            [
+                'id' => Uuid::fromHexToBytes($deliveryId),
+                'updated' => $now->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                'stale' => $now->modify('-' . self::PROCESSING_LEASE_MINUTES . ' minutes')->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            ]
         ) === 1;
     }
 

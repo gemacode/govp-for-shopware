@@ -3,7 +3,7 @@
 Plugin abierto para Shopware 6.7 que emite GOVP cuando una entrega alcanza el
 estado `shipped` o `shipped_partially`.
 
-> Estado: candidato técnico `0.1.0`, todavía unidireccional y pendiente de
+> Estado: candidato técnico `0.1.1`, todavía unidireccional y pendiente de
 > instalación nativa limpia.
 
 ## Alcance
@@ -13,7 +13,10 @@ estado `shipped` o `shipped_partially`.
 - escucha los eventos de entrada en los estados oficiales de entrega;
 - mensaje asíncrono mediante Symfony Messenger/cola de Shopware;
 - reclamación atómica y estado persistente por `order_delivery`;
+- recuperación de reclamaciones `processing` abandonadas durante 15 minutos;
 - clave idempotente por canal y entrega;
+- vigencia derivada de la creación de la entrega para conservar exactamente el
+  mismo contenido en todos los reintentos;
 - evidencia mínima: número de pedido, producto, cantidad y entrega;
 - preferencia por `GOVP_CONNECTOR_TOKEN` en el vault/entorno;
 - token introducido en la pantalla únicamente para demos pequeñas;
