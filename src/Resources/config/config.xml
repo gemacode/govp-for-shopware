@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+  <card>
+    <title>GOVP Exchange</title>
+    <title lang="de-DE">GOVP Exchange</title>
+    <input-field type="bool"><name>active</name><label>Emitir GOVP al expedir</label><label lang="en-GB">Issue GOVP when shipped</label><defaultValue>false</defaultValue></input-field>
+    <input-field type="text"><name>exchangeUrl</name><label>URL de Exchange</label><defaultValue>https://partners.gemacode.org/exchange/api</defaultValue></input-field>
+    <input-field type="text"><name>issuerName</name><label>Nombre del emisor</label><label lang="en-GB">Issuer name</label></input-field>
+    <input-field type="password"><name>token</name><label>Token (solo demo; usar vault en producción)</label><label lang="en-GB">Token (demo only; use vault in production)</label></input-field>
+    <input-field type="int"><name>validityDays</name><label>Días de vigencia</label><label lang="en-GB">Validity days</label><defaultValue>365</defaultValue></input-field>
+  </card>
+</config>
